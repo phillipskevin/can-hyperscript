@@ -1,9 +1,11 @@
 import QUnit from 'steal-qunit';
-import stencil from '../lib/stencil';
+import { h1 } from '../lib/stencil';
 
 QUnit.module('stencil');
 
 QUnit.test('stencil', function(){
-  QUnit.equal(typeof stencil, 'function');
-  QUnit.equal(stencil(), 'This is the stencil plugin');
+	const view = h1('Hello, World!');
+	const frag = view();
+	QUnit.equal(frag.firstChild.tagName, 'H1');
+	QUnit.equal(frag.firstChild.innerHTML, 'Hello, World!');
 });
