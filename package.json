@@ -1,0 +1,49 @@
+{
+  "name": "stencil",
+  "version": "0.0.0",
+  "description": "Experimental functional templating for CanJS",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phillipskevin/stencil.git"
+  },
+  "author": {
+    "name": "Kevin Phillips",
+    "email": "kevin@bitovi.com",
+    "url": ""
+  },
+  "scripts": {
+    "preversion": "npm test && npm run build",
+    "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
+    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "testee": "testee test/test.html --browsers firefox",
+    "test": "npm run jshint && npm run testee",
+    "jshint": "jshint ./*.js --config",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "build": "node build.js",
+    "develop": "done-serve --static --develop --port 8080"
+  },
+  "main": "dist/cjs/stencil",
+  "keywords": [],
+  "steal": {
+    "main": "stencil",
+    "configDependencies": [
+      "live-reload"
+    ],
+    "npmIgnore": [
+      "testee",
+      "steal-tools"
+    ]
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "steal": "^1.0.5",
+    "steal-qunit": "^1.0.0",
+    "steal-tools": "^1.0.1",
+    "testee": "^0.3.0",
+    "done-serve": "^1.0.0-alpha.0"
+  }
+}
