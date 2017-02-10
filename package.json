@@ -29,22 +29,31 @@
   "keywords": [],
   "steal": {
     "main": "stencil",
-    "configDependencies": [
-      "live-reload"
-    ],
     "npmIgnore": [
       "testee",
       "steal-tools"
+    ],
+    "plugins": [
+      "steal-css"
     ]
   },
   "dependencies": {
+    "can-compute": "^3.0.5",
+    "can-types": "^1.0.2",
+    "can-util": "^3.2.2",
+    "can-view-live": "^3.0.5",
+    "can-view-scope": "^3.1.2",
     "can-view-target": "^3.0.7"
   },
   "devDependencies": {
+    "can-component": "^3.0.5",
+    "can-define": "^1.0.16",
     "can-simple-map": "^3.1.2",
+    "can-stache": "^3.0.19",
     "done-serve": "^1.0.0-alpha.0",
     "jshint": "^2.9.4",
     "steal": "^1.0.5",
+    "steal-css": "^1.2.1",
     "steal-qunit": "^1.0.1",
     "steal-tools": "^1.0.1",
     "testee": "^0.3.0"
