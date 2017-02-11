@@ -5,9 +5,9 @@ import { h1, text } from '../lib/stencil';
 QUnit.module('stencil');
 
 QUnit.test('basics', () => {
-	const scope = new SimpleMap({ msg: 'World' });
+	const scope = new SimpleMap({ msg: 'World', class: 'big-h1' });
 	const template = h1({
-		class: 'big-h1'
+		class: '{class}'
 	}, [
 		text('Hello, {msg}!')
 	]);
@@ -17,7 +17,8 @@ QUnit.test('basics', () => {
 	QUnit.equal(frag.firstChild.innerHTML, 'Hello, World!');
 
 	scope.attr('msg', 'Mars');
-	QUnit.equal(frag.firstChild.className, 'big-h1');
+	scope.attr('class', 'small-h1');
+	QUnit.equal(frag.firstChild.className, 'small-h1');
 	QUnit.equal(frag.firstChild.tagName, 'H1');
 	QUnit.equal(frag.firstChild.innerHTML, 'Hello, Mars!');
 });

@@ -6,13 +6,14 @@ import { h1, text } from '../../lib/stencil';
 import './styles.css';
 
 const view = h1({
-	class: 'big-h1'
+	class: '{class}'
 }, [
 	text('Hello, {message}!')
 ]);
 
 const ViewModel = DefineMap.extend({
-	message: { value: 'World' }
+	message: { value: 'World' },
+	class: { value: 'big-h1' }
 });
 
 Component.extend({
