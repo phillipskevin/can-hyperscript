@@ -1,6 +1,6 @@
 import QUnit from 'steal-qunit';
 import SimpleMap from 'can-simple-map';
-import { h1, text } from '../lib/stencil';
+import { h1 } from '../lib/stencil';
 
 QUnit.module('stencil');
 
@@ -9,7 +9,7 @@ QUnit.test('basics', () => {
 	const template = h1({
 		class: '{class}'
 	}, [
-		text('Hello, {msg}!')
+		'Hello, {msg}!'
 	]);
 	const frag = template(scope);
 	QUnit.equal(frag.firstChild.className, 'big-h1');

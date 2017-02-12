@@ -8,7 +8,7 @@ import './styles.css';
 const view = h1({
 	class: '{class}'
 }, [
-	text('Hello, {message}!')
+	'Hello, {message}!'
 ]);
 
 const ViewModel = DefineMap.extend({
