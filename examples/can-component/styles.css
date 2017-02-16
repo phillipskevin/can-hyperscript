@@ -1,4 +1,9 @@
 .big-h1 {
 	font-size: 32px;
+	color: orange;
+}
+
+.bigger-h1 {
+	font-size: 50px;
 	color: red;
 }

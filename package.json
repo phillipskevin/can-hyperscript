@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "can-compute": "^3.0.5",
+    "can-observation": "^3.0.1",
     "can-types": "^1.0.2",
     "can-util": "^3.2.2",
     "can-view-live": "^3.0.5",
