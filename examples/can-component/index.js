@@ -1,38 +1,41 @@
 import Component from 'can-component';
-import stache from 'can-stache';
 import DefineMap from 'can-define/map/map';
 
-import stencil, { h1 } from '../../lib/stencil';
+import stencil, { h1, component } from '../../lib/stencil';
 
 import './styles.css';
 
 const ViewModel = DefineMap.extend({
-	message: { value: 'World' },
-	class: { value: 'big-h1' }
+  message: {
+    set(val) {
+      return `${val}!`;
+    }
+  },
+  class: { value: 'big-h1' }
 });
 
 const view = (scope) => {
-	return h1({
-		class: scope.class
-	}, [
-		`Hello, ${scope.message}!`
-	]);
+  return h1({
+    class: scope.class
+  }, [
+    `Hello, ${scope.message}`
+  ]);
 };
 
+const parentScope = new DefineMap({
+  message: 'World'
+});
+
 Component.extend({
-	tag: 'hello-world',
-	ViewModel,
-	view: stencil(view),
-	events: {
-		inserted() {
-			setTimeout(() => {
-				this.viewModel.message = 'Kevin';
-				this.viewModel.class = 'bigger-h1';
-			}, 2000);
-		}
-	}
+  tag: 'hello-world',
+  ViewModel,
+  view: stencil(view)
 });
 
 document.body.append(
-	stache('<hello-world></hello-world>')()
+  component('hello-world', parentScope)
 );
+
+setTimeout(() => {
+  parentScope.message = 'Kevin';
+}, 2000);
