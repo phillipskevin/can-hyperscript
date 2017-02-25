@@ -11,19 +11,20 @@ const ViewModel = DefineMap.extend({
       return `${val}!`;
     }
   },
-  class: { value: 'big-h1' }
+  headerClass: { value: 'big-h1' }
 });
 
 const view = (scope) => {
   return h1({
-    class: scope.class
+    class: () => scope.headerClass
   }, [
-    `Hello, ${scope.message}`
+    () => `Hello, ${scope.message}`
   ]);
 };
 
 const parentScope = new DefineMap({
-  message: 'World'
+  message: 'World',
+  headerClass: 'small-h1'
 });
 
 Component.extend({
@@ -37,5 +38,11 @@ document.body.append(
 );
 
 setTimeout(() => {
+  console.log('changing message');
   parentScope.message = 'Kevin';
-}, 2000);
+}, 5000);
+
+setTimeout(() => {
+  console.log('changing header class');
+  parentScope.headerClass = 'big-h1';
+}, 10000);
