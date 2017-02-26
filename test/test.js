@@ -2,7 +2,10 @@ import QUnit from 'steal-qunit';
 import SimpleMap from 'can-simple-map';
 import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
-import stencil, { h1, div, p } from '../../lib/stencil';
+import DefineList from 'can-define/list/list';
+import compute from 'can-compute';
+import viewModel from 'can-view-model';
+import stencil, { h1, div, p, ul, li, component } from '../../lib/stencil';
 
 QUnit.module('stencil');
 
@@ -72,39 +75,117 @@ QUnit.test('element with multiple children', () => {
   QUnit.equal(frag.children[1].innerHTML, 'Second Paragraph');
 });
 
-// QUnit.test('can-components', () => {
-//   const ViewModel = DefineMap.extend({
-//     message: {
-//       set(val) {
-//         return `${val}!`;
-//       }
-//     },
-//         class: { value: 'big-h1' }
-//   });
-// 
-//   const view = scope => {
-//     return h1({
-//       class: scope.class
-//     }, [
-//     `Hello, ${scope.message}`
-//     ]);
-//   };
-// 
-//   Component.extend({
-//     tag: 'hello-world',
-//     ViewModel,
-//     view: stencil(view)
-//   });
-// 
-//   const parentScope = new DefineMap({
-//     message: 'World'
-//   });
-// 
-//   const frag =  component('hello-world', parentScope);
-//   QUnit.equal(frag.firstChild.className, 'big-h1');
-//   QUnit.equal(frag.firstChild.tagName, 'H1');
-//   QUnit.equal(frag.firstChild.innerHTML, 'Hello, World!');
-// 
-//   parentScope.message = 'Kevin';
-//   QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
-// });
+QUnit.test('element with multiple children from scope', () => {
+  const Scope = DefineMap.extend({
+    children: DefineList
+  });
+  const scope = new Scope({
+    children: [ 'First', 'Second' ]
+  });
+
+  const view = scope => {
+    return ul({}, () => scope.children.map(child =>
+        li({}, [ `${child} List Item` ])));
+  };
+
+  const template = stencil(view);
+  const frag = template(scope);
+
+  QUnit.equal(frag.tagName, 'UL');
+
+  QUnit.equal(frag.children[0].tagName, 'LI');
+  QUnit.equal(frag.children[0].innerHTML, 'First List Item');
+
+  QUnit.equal(frag.children[1].tagName, 'LI');
+  QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
+
+  scope.children.push('Third');
+  QUnit.equal(frag.tagName, 'UL');
+
+  QUnit.equal(frag.children[0].tagName, 'LI');
+  QUnit.equal(frag.children[0].innerHTML, 'First List Item');
+
+  QUnit.equal(frag.children[1].tagName, 'LI');
+  QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
+
+  QUnit.equal(frag.children[2].tagName, 'LI');
+  QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
+});
+
+QUnit.test('can-component', () => {
+  const ViewModel = DefineMap.extend({
+    message: {
+      value: 'World',
+      set(val) {
+        return `${val}!`;
+      }
+    },
+    class: { value: 'big-h1' }
+  });
+
+  const view = scope => {
+    return h1({
+      class: () => scope.class
+    }, [
+      () => `Hello, ${scope.message}`
+    ]);
+  };
+
+  Component.extend({
+    tag: 'hello-world',
+    ViewModel,
+    view: stencil(view)
+  });
+
+  const frag = component('hello-world', {});
+  QUnit.equal(frag.firstChild.className, 'big-h1');
+  QUnit.equal(frag.firstChild.tagName, 'H1');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, World!');
+
+  const vm = viewModel(frag);
+
+  vm.class = 'small-h1';
+  vm.message = 'Kevin';
+  QUnit.equal(frag.firstChild.className, 'small-h1');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
+});
+
+QUnit.test('can-component using parent scope', () => {
+  const ViewModel = DefineMap.extend({
+    message: {
+      value: 'World',
+      set(val) {
+        return `${val}!`;
+      }
+    },
+    class: { value: 'big-h1' }
+  });
+
+  const view = scope => {
+    return h1({
+      class: () => scope.class
+    }, [
+      () => `Hello, ${scope.message}`
+    ]);
+  };
+
+  Component.extend({
+    tag: 'hello-world',
+    ViewModel,
+    view: stencil(view)
+  });
+
+  const parentScope = new DefineMap({
+    message: 'Parent',
+    class: 'parent-h1'
+  });
+  const frag = component('hello-world', parentScope);
+  QUnit.equal(frag.firstChild.className, 'parent-h1');
+  QUnit.equal(frag.firstChild.tagName, 'H1');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Parent!');
+
+  parentScope.class = 'small-h1';
+  parentScope.message = 'Kevin';
+  QUnit.equal(frag.firstChild.className, 'small-h1');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
+});

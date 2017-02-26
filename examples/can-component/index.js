@@ -1,7 +1,8 @@
 import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
 
-import stencil, { h1, component } from '../../lib/stencil';
+import stencil, { h1, div, p, component } from '../../lib/stencil';
 
 import './styles.css';
 
@@ -11,20 +12,24 @@ const ViewModel = DefineMap.extend({
       return `${val}!`;
     }
   },
-  headerClass: { value: 'big-h1' }
+  headerClass: 'string',
+  list: { Type: DefineList, value: [] }
 });
 
 const view = (scope) => {
-  return h1({
-    class: () => scope.headerClass
-  }, [
-    () => `Hello, ${scope.message}`
+  return div({}, [
+    h1({
+      class: () => scope.headerClass
+    }, [ () => `Hello, ${scope.message}` ]),
+    div({}, () =>
+      scope.list.map(item => p({}, [ `${item} Paragraph` ])))
   ]);
 };
 
 const parentScope = new DefineMap({
   message: 'World',
-  headerClass: 'small-h1'
+  headerClass: 'small-h1',
+  list: [ 'First', 'Second' ]
 });
 
 Component.extend({
@@ -38,11 +43,10 @@ document.body.append(
 );
 
 setTimeout(() => {
-  console.log('changing message');
   parentScope.message = 'Kevin';
+  parentScope.headerClass = 'big-h1';
 }, 5000);
 
 setTimeout(() => {
-  console.log('changing header class');
-  parentScope.headerClass = 'big-h1';
+  parentScope.list.push('Third');
 }, 10000);
