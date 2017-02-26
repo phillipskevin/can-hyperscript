@@ -5,7 +5,9 @@ import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import compute from 'can-compute';
 import viewModel from 'can-view-model';
-import stencil, { h1, div, p, ul, li, component } from '../../lib/stencil';
+import domDispatch from 'can-util/dom/dispatch/dispatch';
+
+import stencil, { h1, div, p, ul, li, input, component } from '../../lib/stencil';
 
 QUnit.module('stencil');
 
@@ -110,6 +112,31 @@ QUnit.test('element with multiple children from scope', () => {
 
   QUnit.equal(frag.children[2].tagName, 'LI');
   QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
+});
+
+QUnit.test('element with live text', () => {
+  const scope = new DefineMap({
+    count: 0,
+    plus() {
+      QUnit.ok(true, 'plus called');
+      this.count++;
+    }
+  });
+
+  const view = scope => {
+    return div({}, [
+      p({}, [ () => `Count: ${scope.count}` ]),
+      input({ type: 'submit', onClick: scope.plus }, [ 'Click Me!' ])
+    ])
+  };
+
+  const template = stencil(view);
+  const frag = template(scope);
+
+  QUnit.equal(frag.children[0].innerHTML, 'Count: 0');
+
+  const inputEl = frag.children[1];
+  domDispatch.call(inputEl, 'click');
 });
 
 QUnit.test('can-component', () => {
