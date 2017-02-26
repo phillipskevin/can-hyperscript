@@ -1,94 +1,70 @@
 import QUnit from 'steal-qunit';
-import SimpleMap from 'can-simple-map';
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 
-import stencil, { h1, div, p, ul, li, input } from '../../lib/stencil';
+import { h1, div, p, ul, li, input } from '../../lib/stencil';
 
 QUnit.module('stencil');
 
-QUnit.test('element with live text', () => {
-  const scope = new SimpleMap({
+QUnit.test('live binding - text node', () => {
+  const data = new DefineMap({
     message: 'World'
   });
 
-  const view = scope => {
+  const view = data => {
     return h1({ class: 'big-h1' }, [
-      () => `Hello, ${scope.message}!`
+      () => `Hello, ${data.message}!`
     ]);
   };
 
-  const template = stencil(view);
-  const frag = template(scope);
+  const frag = view(data);
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, World!');
   QUnit.equal(frag.className, 'big-h1');
 
-  scope.attr('message', 'Mars');
+  data.message = 'Mars';
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, Mars!');
   QUnit.equal(frag.className, 'big-h1');
 });
 
-QUnit.test('element with live attribute', () => {
-  const scope = new SimpleMap({
+QUnit.test('live binding - attribute', () => {
+  const data = new DefineMap({
     class: 'big-h1'
   });
 
-  const view = scope => {
-    return h1({ class: () => scope.class }, [
+  const view = data => {
+    return h1({ class: () => data.class }, [
       'Hello, World!'
     ]);
   };
 
-  const template = stencil(view);
-  const frag = template(scope);
+  const frag = view(data);
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, World!');
   QUnit.equal(frag.className, 'big-h1');
 
-  scope.attr('class', 'small-h1');
+  data.class = 'small-h1';
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, World!');
   QUnit.equal(frag.className, 'small-h1');
 });
 
-QUnit.test('element with multiple children', () => {
-  const view = scope => {
-    return div({}, [
-      p({}, [ 'First Paragraph' ]),
-      p({}, [ 'Second Paragraph' ])
-    ]);
-  };
-
-  const template = stencil(view);
-  const frag = template({});
-
-  QUnit.equal(frag.tagName, 'DIV');
-
-  QUnit.equal(frag.children[0].tagName, 'P');
-  QUnit.equal(frag.children[0].innerHTML, 'First Paragraph');
-
-  QUnit.equal(frag.children[1].tagName, 'P');
-  QUnit.equal(frag.children[1].innerHTML, 'Second Paragraph');
-});
-
-QUnit.test('element with multiple children from scope', () => {
+QUnit.test('live binding - children', () => {
   const Scope = DefineMap.extend({
     children: DefineList
   });
-  const scope = new Scope({
+  const data = new Scope({
     children: [ 'First', 'Second' ]
   });
 
-  const view = scope => {
-    return ul({}, () => scope.children.map(child =>
+  const view = data => {
+    return ul({}, () => data.children.map(child =>
         li({}, [ `${child} List Item` ])));
   };
 
-  const template = stencil(view);
-  const frag = template(scope);
+  const frag = view(data);
 
   QUnit.equal(frag.tagName, 'UL');
 
@@ -98,7 +74,7 @@ QUnit.test('element with multiple children from scope', () => {
   QUnit.equal(frag.children[1].tagName, 'LI');
   QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
 
-  scope.children.push('Third');
+  data.children.push('Third');
   QUnit.equal(frag.tagName, 'UL');
 
   QUnit.equal(frag.children[0].tagName, 'LI');
@@ -111,8 +87,8 @@ QUnit.test('element with multiple children from scope', () => {
   QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
 });
 
-QUnit.test('element with live text', () => {
-  const scope = new DefineMap({
+QUnit.test('event handling', () => {
+  const data = new DefineMap({
     count: 0,
     plus() {
       QUnit.ok(true, 'plus called');
@@ -120,15 +96,14 @@ QUnit.test('element with live text', () => {
     }
   });
 
-  const view = scope => {
+  const view = data => {
     return div({}, [
-      p({}, [ () => `Count: ${scope.count}` ]),
-      input({ type: 'submit', onClick: scope.plus }, [ 'Click Me!' ])
+      p({}, [ () => `Count: ${data.count}` ]),
+      input({ type: 'submit', onClick: data.plus }, [ 'Click Me!' ])
     ])
   };
 
-  const template = stencil(view);
-  const frag = template(scope);
+  const frag = view(data);
 
   QUnit.equal(frag.children[0].innerHTML, 'Count: 0');
 

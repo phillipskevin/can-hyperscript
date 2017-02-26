@@ -3,7 +3,8 @@ import DefineMap from 'can-define/map/map';
 import Component from 'can-component';
 import viewModel from 'can-view-model';
 
-import stencil, { h1, component } from '../../lib/stencil';
+import { h1 } from '../../lib/stencil';
+import { renderView, component } from '../../lib/component';
 
 QUnit.module('stencil - can-component');
 
@@ -29,7 +30,7 @@ QUnit.test('can-component', () => {
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: stencil(view)
+    view: renderView(view)
   });
 
   const frag = component('hello-world', {});
@@ -67,7 +68,7 @@ QUnit.test('can-component using parent scope', () => {
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: stencil(view)
+    view: renderView(view)
   });
 
   const parentScope = new DefineMap({

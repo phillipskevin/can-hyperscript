@@ -1,7 +1,8 @@
 import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 
-import stencil, { h1, div, p, input, component } from '../../lib/stencil';
+import { h1, div, p, input } from '../../lib/stencil';
+import { component, renderView } from '../../lib/component';
 
 import './styles.css';
 
@@ -22,7 +23,7 @@ const oneCounterView = (scope) => {
 Component.extend({
   tag: 'one-counter',
   ViewModel: OneCounterViewModel,
-  view: stencil(oneCounterView)
+  view: renderView(oneCounterView)
 });
 
 document.body.append(

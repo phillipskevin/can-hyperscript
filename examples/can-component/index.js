@@ -2,7 +2,8 @@ import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 
-import stencil, { h1, div, p, component } from '../../lib/stencil';
+import { h1, div, p } from '../../lib/stencil';
+import { component, renderView } from '../../lib/component';
 
 import './styles.css';
 
@@ -35,7 +36,7 @@ const parentScope = new DefineMap({
 Component.extend({
   tag: 'hello-world',
   ViewModel,
-  view: stencil(view)
+  view: renderView(view)
 });
 
 document.body.append(
@@ -45,8 +46,8 @@ document.body.append(
 setTimeout(() => {
   parentScope.message = 'Kevin';
   parentScope.headerClass = 'big-h1';
-}, 5000);
+}, 2000);
 
 setTimeout(() => {
   parentScope.list.push('Third');
-}, 10000);
+}, 4000);
