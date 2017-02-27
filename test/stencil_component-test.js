@@ -81,13 +81,13 @@ QUnit.test('can bind viewModel to parent scope', () => {
   QUnit.equal(frag.firstChild.tagName, 'H1');
   QUnit.equal(frag.firstChild.innerHTML, 'Hello, Parent!');
 
-  // to-parent binding
+  // to-child binding
   parentScope.class = 'small-h1';
   parentScope.message = 'Kevin';
   QUnit.equal(frag.firstChild.className, 'small-h1');
   QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
 
-  // to-child binding
+  // to-parent binding
   const vm = viewModel(frag);
   vm.class = 'big-h1';
   vm.message = 'Connor';
