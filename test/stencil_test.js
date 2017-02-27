@@ -87,7 +87,7 @@ QUnit.test('live binding - children', () => {
   QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
 });
 
-QUnit.test('event handling', () => {
+QUnit.test('event handling - can call function from data object', () => {
   const data = new DefineMap({
     count: 0,
     plus() {
@@ -107,6 +107,29 @@ QUnit.test('event handling', () => {
 
   QUnit.equal(frag.children[0].innerHTML, 'Count: 0');
 
-  const inputEl = frag.children[1];
-  domDispatch.call(inputEl, 'click');
+  const button = frag.children[1];
+  domDispatch.call(button, 'click');
+});
+
+QUnit.test('event handling - can update data from event handler', () => {
+  const Data = DefineMap.extend({
+    count: {
+      set(val) {
+        QUnit.equal(val, 5, 'count set to 5');
+        return val
+      }
+    }
+  });
+
+  const view = data => {
+    return div({}, [
+      p({}, [ () => `Count: ${data.count}` ]),
+      input({ type: 'submit', onClick: () => { data.count = 5; } }, [ 'Click Me!' ])
+    ])
+  };
+
+  const frag = view(new Data());
+
+  const button = frag.children[1];
+  domDispatch.call(button, 'click');
 });
