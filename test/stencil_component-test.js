@@ -4,12 +4,12 @@ import Component from 'can-component';
 import viewModel from 'can-view-model';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 
-import { h1, input } from '../../lib/stencil';
-import { renderView, component } from '../../lib/component';
+import h from '../../lib/stencil';
+import { render, component } from '../../lib/component';
 
 QUnit.module('stencil - can-component');
 
-QUnit.test('renderView', () => {
+QUnit.test('render', () => {
   const ViewModel = DefineMap.extend({
     message: {
       value: 'World',
@@ -21,7 +21,7 @@ QUnit.test('renderView', () => {
   });
 
   const view = scope => {
-    return h1({
+    return h('h1', {
       class: () => scope.class
     }, [
       () => `Hello, ${scope.message}`
@@ -31,7 +31,7 @@ QUnit.test('renderView', () => {
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: renderView(view)
+    view: render(view)
   });
 
   const frag = component('hello-world', {});
@@ -59,7 +59,7 @@ QUnit.test('can bind viewModel to parent scope', () => {
   });
 
   const view = scope => {
-    return h1({
+    return h('h1', {
       class: () => scope.class
     }, [
       () => `Hello, ${scope.message}`
@@ -69,7 +69,7 @@ QUnit.test('can bind viewModel to parent scope', () => {
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: renderView(view)
+    view: render(view)
   });
 
   const parentScope = new DefineMap({
@@ -105,13 +105,13 @@ QUnit.test('event handling - call viewModel function', () => {
   });
 
   const view = scope => {
-    return input({ type: 'submit', onclick: scope.plus, value: 'Plus 1' }, [])
+    return h('input', { type: 'submit', onclick: scope.plus, value: 'Plus 1' }, [])
   };
 
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: renderView(view)
+    view: render(view)
   });
 
   const frag = component('hello-world', {});
@@ -126,13 +126,13 @@ QUnit.test('event handling - set viewModel property from event handler', () => {
   });
 
   const view = scope => {
-    return input({ type: 'submit', onclick: () => { scope.count = 5; }, value: 'Set to 5' }, [])
+    return h('input', { type: 'submit', onclick: () => { scope.count = 5; }, value: 'Set to 5' }, [])
   };
 
   Component.extend({
     tag: 'hello-world',
     ViewModel,
-    view: renderView(view)
+    view: render(view)
   });
 
   const frag = component('hello-world', {});

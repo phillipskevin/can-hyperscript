@@ -2,10 +2,29 @@ import QUnit from 'steal-qunit';
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
+import compute from 'can-compute';
 
-import { h1, div, p, ul, li, input } from '../../lib/stencil';
+import h from '../../lib/stencil';
 
 QUnit.module('stencil');
+
+QUnit.test('live binding - text node (compute)', () => {
+  const message = compute(`Hello, World!`);
+
+  const view = data => {
+    return h('h1.big-h1', {}, [ message ]);
+  };
+
+  const frag = view({});
+  QUnit.equal(frag.tagName, 'H1');
+  QUnit.equal(frag.innerHTML, 'Hello, World!');
+  QUnit.equal(frag.className, 'big-h1');
+
+  message(`Hello, Mars!`);
+  QUnit.equal(frag.tagName, 'H1');
+  QUnit.equal(frag.innerHTML, 'Hello, Mars!');
+  QUnit.equal(frag.className, 'big-h1');
+});
 
 QUnit.test('live binding - text node', () => {
   const data = new DefineMap({
@@ -13,7 +32,7 @@ QUnit.test('live binding - text node', () => {
   });
 
   const view = data => {
-    return h1({ class: 'big-h1' }, [
+    return h('h1.big-h1', {}, [
       () => `Hello, ${data.message}!`
     ]);
   };
@@ -35,7 +54,7 @@ QUnit.test('live binding - attribute', () => {
   });
 
   const view = data => {
-    return h1({ class: () => data.class }, [
+    return h('h1', { class: () => data.class }, [
       'Hello, World!'
     ]);
   };
@@ -60,8 +79,8 @@ QUnit.test('live binding - children', () => {
   });
 
   const view = data => {
-    return ul({}, () => data.children.map(child =>
-        li({}, [ `${child} List Item` ])));
+    return h('ul', {}, () => data.children.map(child =>
+        h('li', {}, [ `${child} List Item` ])));
   };
 
   const frag = view(data);
@@ -97,9 +116,9 @@ QUnit.test('event handling - can call function from data object', () => {
   });
 
   const view = data => {
-    return div({}, [
-      p({}, [ () => `Count: ${data.count}` ]),
-      input({ type: 'submit', onClick: data.plus }, [ 'Click Me!' ])
+    return h('div', {}, [
+      h('p', {}, [ () => `Count: ${data.count}` ]),
+      h('input', { type: 'submit', onclick: data.plus }, [ 'Click Me!' ])
     ])
   };
 
@@ -122,9 +141,11 @@ QUnit.test('event handling - can update data from event handler', () => {
   });
 
   const view = data => {
-    return div({}, [
-      p({}, [ () => `Count: ${data.count}` ]),
-      input({ type: 'submit', onClick: () => { data.count = 5; } }, [ 'Click Me!' ])
+    return h('div', {}, [
+      h('p', {}, [ () => `Count: ${data.count}` ]),
+      h('input', { type: 'submit', onclick: () => {
+        data.count = 5;
+      } }, [ 'Click Me!' ])
     ])
   };
 
