@@ -1,8 +1,8 @@
 import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 
-import { h1, h2, div, p, input } from '../../lib/stencil';
-import { component, renderView } from '../../lib/component';
+import h from '../../lib/stencil';
+import { component, render } from '../../lib/component';
 
 import viewModel from 'can-view-model';
 window.viewModel = viewModel;
@@ -15,10 +15,10 @@ const AppViewModel = DefineMap.extend({
 });
 
 const appView = (scope) => {
-  return div({}, [
-    div({}, [
-      h1({}, [ () => `Count: ${scope.count}` ]),
-      input({
+  return h('div', {}, [
+    h('div', {}, [
+      h('h1', {}, [ () => `Count: ${scope.count}` ]),
+      h('input', {
         type: 'text',
         value: () => scope.count,
         onchange: (ev) => {
@@ -26,8 +26,8 @@ const appView = (scope) => {
         }
       }, [])
     ]),
-    div({}, [
-      h2({}, [ 'Children' ]),
+    h('div', {}, [
+      h('h2', {}, [ 'Children' ]),
       component('a-counter', scope)
     ])
   ]);
@@ -36,7 +36,7 @@ const appView = (scope) => {
 Component.extend({
   tag: 'my-app',
   ViewModel: AppViewModel,
-  view: renderView(appView)
+  view: render(appView)
 });
 
 // Counter Component
@@ -47,17 +47,17 @@ const CounterViewModel = DefineMap.extend({
 });
 
 const counterView = (scope) => {
-  return div({}, [
-      p({}, [ () => `Count: ${scope.count}` ]),
-      input({ type: 'submit', onclick: scope.plus, value: '+' }, []),
-      input({ type: 'submit', onclick: scope.minus, value: '-' }, [])
+  return h('div', {}, [
+      h('p', {}, [ () => `Count: ${scope.count}` ]),
+      h('input', { type: 'submit', onclick: scope.plus, value: '+' }, []),
+      h('input', { type: 'submit', onclick: scope.minus, value: '-' }, [])
   ]);
 };
 
 Component.extend({
   tag: 'a-counter',
   ViewModel: CounterViewModel,
-  view: renderView(counterView)
+  view: render(counterView)
 });
 
 document.body.append(
