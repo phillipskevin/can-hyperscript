@@ -2,7 +2,8 @@ var stealTools = require("steal-tools");
 
 stealTools.export({
 	steal: {
-		config: __dirname + "/package.json!npm"
+		config: __dirname + "/package.json!npm",
+		main: "lib/can-hyperscript"
 	},
 	outputs: {
 		"+amd": {},
