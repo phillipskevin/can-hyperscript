@@ -107,7 +107,7 @@ QUnit.test('event handling - call viewModel function', () => {
   });
 
   const view = scope => {
-    return h('input', { type: 'submit', onclick: scope.plus, value: 'Plus 1' }, [])
+    return h('input', { type: 'submit', onclick: scope.plus, value: 'Plus 1' }, []);
   };
 
   Component.extend({
@@ -128,7 +128,7 @@ QUnit.test('event handling - set viewModel property from event handler', () => {
   });
 
   const view = scope => {
-    return h('input', { type: 'submit', onclick: () => { scope.count = 5; }, value: 'Set to 5' }, [])
+    return h('input', { type: 'submit', onclick: () => { scope.count = 5; }, value: 'Set to 5' }, []);
   };
 
   Component.extend({

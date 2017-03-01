@@ -6,6 +6,20 @@ import compute from 'can-compute';
 
 import h from '../lib/can-hyperscript';
 
+QUnit.module('can-hyperscript');
+
+QUnit.test('should match hyperscript API', () => {
+  QUnit.equal(h('h1', 'a').outerHTML, '<h1>a</h1>');
+  QUnit.equal(h('h1', 'a', 'b').outerHTML, '<h1>ab</h1>');
+  QUnit.equal(h('h1', 'a', 'b', [ 'c', 'd' ]).outerHTML, '<h1>abcd</h1>');
+  QUnit.equal(h('h1.a.b#c', 'd').outerHTML, '<h1 class="a b" id="c">d</h1>');
+  QUnit.equal(h('.a.b#c', 'd').outerHTML, '<div class="a b" id="c">d</div>');
+  QUnit.equal(h('h1', { 'data-id': 'a' }, 'b').outerHTML, '<h1 data-id="a">b</h1>');
+  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c').outerHTML, '<h1 data-id="b">ac</h1>');
+  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c', [ 'd', 'e' ]).outerHTML, '<h1 data-id="b">acde</h1>');
+  QUnit.equal(h('div', h('h1', 'a')).outerHTML, '<div><h1>a</h1></div>');
+});
+
 QUnit.module('can-hyperscript - live binding - computes');
 
 QUnit.test('text node', () => {
@@ -171,7 +185,7 @@ QUnit.test('can call function from data object', () => {
     return h('div', {}, [
       h('p', {}, [ () => `Count: ${data.count}` ]),
       h('input', { type: 'submit', onclick: data.plus }, [ 'Click Me!' ])
-    ])
+    ]);
   };
 
   const frag = view(data);
@@ -187,7 +201,7 @@ QUnit.test('can update data from event handler', () => {
     count: {
       set(val) {
         QUnit.equal(val, 5, 'count set to 5');
-        return val
+        return val;
       }
     }
   });
@@ -198,7 +212,7 @@ QUnit.test('can update data from event handler', () => {
       h('input', { type: 'submit', onclick: () => {
         data.count = 5;
       } }, [ 'Click Me!' ])
-    ])
+    ]);
   };
 
   const frag = view(new Data());
