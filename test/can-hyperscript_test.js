@@ -4,29 +4,79 @@ import DefineList from 'can-define/list/list';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 import compute from 'can-compute';
 
-import h from '../../lib/stencil';
+import h from '../lib/can-hyperscript';
 
-QUnit.module('stencil');
+QUnit.module('can-hyperscript - live binding - computes');
 
-QUnit.test('live binding - text node (compute)', () => {
-  const message = compute(`Hello, World!`);
+QUnit.test('text node', () => {
+  const message = compute('Hello, World!');
 
   const view = data => {
-    return h('h1.big-h1', {}, [ message ]);
+    return h('h1.big-h1', {}, [ data.message ]);
   };
 
-  const frag = view({});
+  const frag = view({ message });
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, World!');
   QUnit.equal(frag.className, 'big-h1');
 
-  message(`Hello, Mars!`);
+  message('Hello, Mars!');
   QUnit.equal(frag.tagName, 'H1');
   QUnit.equal(frag.innerHTML, 'Hello, Mars!');
   QUnit.equal(frag.className, 'big-h1');
 });
 
-QUnit.test('live binding - text node', () => {
+QUnit.test('attributes', () => {
+  const headerClass = compute('big-h1');
+
+  const view = data => {
+    return h('h1', { class: data.headerClass }, [ 'Hello, World!' ]);
+  };
+
+  const frag = view({ headerClass });
+  QUnit.equal(frag.tagName, 'H1');
+  QUnit.equal(frag.innerHTML, 'Hello, World!');
+  QUnit.equal(frag.className, 'big-h1');
+
+  headerClass('small-h1');
+  QUnit.equal(frag.tagName, 'H1');
+  QUnit.equal(frag.innerHTML, 'Hello, World!');
+  QUnit.equal(frag.className, 'small-h1');
+});
+
+QUnit.test('children', () => {
+  const children = compute([ '<li>First</li>', '<li>Second</li>' ]);
+
+  const view = data => {
+    return h('ul', {}, data.children);
+  };
+
+  const frag = view({ children });
+
+  QUnit.equal(frag.tagName, 'UL');
+
+  QUnit.equal(frag.children[0].tagName, 'LI');
+  QUnit.equal(frag.children[0].innerHTML, 'First');
+
+  QUnit.equal(frag.children[1].tagName, 'LI');
+  QUnit.equal(frag.children[1].innerHTML, 'Second');
+
+  children([ '<li>First</li>', '<li>Second</li>', '<li>Third</li>' ]);
+  QUnit.equal(frag.tagName, 'UL');
+
+  QUnit.equal(frag.children[0].tagName, 'LI');
+  QUnit.equal(frag.children[0].innerHTML, 'First');
+
+  QUnit.equal(frag.children[1].tagName, 'LI');
+  QUnit.equal(frag.children[1].innerHTML, 'Second');
+
+  QUnit.equal(frag.children[2].tagName, 'LI');
+  QUnit.equal(frag.children[2].innerHTML, 'Third');
+});
+
+QUnit.module('can-hyperscript - live binding - DefineMap');
+
+QUnit.test('text node', () => {
   const data = new DefineMap({
     message: 'World'
   });
@@ -48,7 +98,7 @@ QUnit.test('live binding - text node', () => {
   QUnit.equal(frag.className, 'big-h1');
 });
 
-QUnit.test('live binding - attribute', () => {
+QUnit.test('attribute', () => {
   const data = new DefineMap({
     class: 'big-h1'
   });
@@ -70,7 +120,7 @@ QUnit.test('live binding - attribute', () => {
   QUnit.equal(frag.className, 'small-h1');
 });
 
-QUnit.test('live binding - children', () => {
+QUnit.test('children', () => {
   const Scope = DefineMap.extend({
     children: DefineList
   });
@@ -106,7 +156,9 @@ QUnit.test('live binding - children', () => {
   QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
 });
 
-QUnit.test('event handling - can call function from data object', () => {
+QUnit.module('can-hyperscript - event handling');
+
+QUnit.test('can call function from data object', () => {
   const data = new DefineMap({
     count: 0,
     plus() {
@@ -130,7 +182,7 @@ QUnit.test('event handling - can call function from data object', () => {
   domDispatch.call(button, 'click');
 });
 
-QUnit.test('event handling - can update data from event handler', () => {
+QUnit.test('can update data from event handler', () => {
   const Data = DefineMap.extend({
     count: {
       set(val) {

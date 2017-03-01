@@ -5,7 +5,7 @@
   "homepage": "",
   "repository": {
     "type": "git",
-    "url": "git://github.com/phillipskevin/stencil.git"
+    "url": "git://github.com/phillipskevin/can-hyperscript.git"
   },
   "author": {
     "name": "Kevin Phillips",
@@ -25,10 +25,10 @@
     "build": "node build.js",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/stencil",
+  "main": "dist/cjs/can-hyperscript",
   "keywords": [],
   "steal": {
-    "main": "stencil",
+    "main": "can-hyperscript",
     "npmIgnore": [
       "testee",
       "steal-tools"

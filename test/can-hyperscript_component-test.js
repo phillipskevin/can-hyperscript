@@ -4,10 +4,12 @@ import Component from 'can-component';
 import viewModel from 'can-view-model';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 
-import h from '../../lib/stencil';
-import { render, component } from '../../lib/component';
+import hyperscript from '../lib/can-hyperscript';
+import hyperComponents, { render } from '../../lib/component';
 
-QUnit.module('stencil - can-component');
+const h = hyperComponents(hyperscript);
+
+QUnit.module('can-hyperscript - can-component');
 
 QUnit.test('render', () => {
   const ViewModel = DefineMap.extend({
@@ -34,7 +36,7 @@ QUnit.test('render', () => {
     view: render(view)
   });
 
-  const frag = component('hello-world', {});
+  const frag = h('hello-world', {});
   QUnit.equal(frag.firstChild.className, 'big-h1');
   QUnit.equal(frag.firstChild.tagName, 'H1');
   QUnit.equal(frag.firstChild.innerHTML, 'Hello, World!');
@@ -76,7 +78,7 @@ QUnit.test('can bind viewModel to parent scope', () => {
     message: 'Parent',
     class: 'parent-h1'
   });
-  const frag = component('hello-world', parentScope);
+  const frag = h('hello-world', parentScope);
   QUnit.equal(frag.firstChild.className, 'parent-h1');
   QUnit.equal(frag.firstChild.tagName, 'H1');
   QUnit.equal(frag.firstChild.innerHTML, 'Hello, Parent!');
@@ -114,7 +116,7 @@ QUnit.test('event handling - call viewModel function', () => {
     view: render(view)
   });
 
-  const frag = component('hello-world', {});
+  const frag = h('hello-world', {});
 
   const button = frag.children[0];
   domDispatch.call(button, 'click');
@@ -135,7 +137,7 @@ QUnit.test('event handling - set viewModel property from event handler', () => {
     view: render(view)
   });
 
-  const frag = component('hello-world', {});
+  const frag = h('hello-world', {});
 
   const button = frag.children[0];
   domDispatch.call(button, 'click');

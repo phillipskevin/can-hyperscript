@@ -1,13 +1,14 @@
 import Component from 'can-component';
 import DefineMap from 'can-define/map/map';
 
-import h from '../../lib/stencil';
-import { component, render } from '../../lib/component';
+import hyperscript from '../../lib/can-hyperscript';
+import hyperComponents, { render } from '../../lib/component';
 
 import viewModel from 'can-view-model';
-window.viewModel = viewModel;
 
 import './styles.css';
+
+const h = hyperComponents(hyperscript);
 
 // App
 const AppViewModel = DefineMap.extend({
@@ -28,7 +29,7 @@ const appView = (scope) => {
     ]),
     h('div', {}, [
       h('h2', {}, [ 'Children' ]),
-      component('a-counter', scope)
+      h('a-counter', scope)
     ])
   ]);
 };
@@ -61,5 +62,5 @@ Component.extend({
 });
 
 document.body.append(
-  component('my-app', {}),
+  h('my-app', {}),
 );
