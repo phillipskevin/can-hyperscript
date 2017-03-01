@@ -4,15 +4,16 @@ import DefineList from 'can-define/list/list';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 import compute from 'can-compute';
 
-import h from '../../lib/stencil';
+import h from '../lib/can-hyperscript';
 
-QUnit.module('stencil');
+QUnit.module('can-hyperscript');
 
-QUnit.test('live binding - text node (compute)', () => {
-  const message = compute(`Hello, World!`);
+QUnit.test('live binding - computes', () => {
+  const message = compute('Hello, World!');
+  const headerClass = compute('big-h1');
 
   const view = data => {
-    return h('h1.big-h1', {}, [ message ]);
+    return h('h1', { class: headerClass }, [ message ]);
   };
 
   const frag = view({});

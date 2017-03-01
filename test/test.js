@@ -1,2 +1,2 @@
-import './stencil_test';
-import './stencil_component-test';
+import './can-hyperscript_test';
+import './can-hyperscript_component-test';

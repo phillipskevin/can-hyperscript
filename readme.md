@@ -1,5 +1,5 @@
-# stencil
+# can-hyperscript
 
-[![Build Status](https://travis-ci.org/phillipskevin/stencil.png?branch=master)](https://travis-ci.org/phillipskevin/stencil)
+[![Build Status](https://travis-ci.org/phillipskevin/can-hyperscript.png?branch=master)](https://travis-ci.org/phillipskevin/can-hyperscript)
 
-Experimental functional templating for CanJS
+Create HyperText with JavaScript and CanJS live binding.

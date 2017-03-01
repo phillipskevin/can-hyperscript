@@ -4,12 +4,12 @@ import Component from 'can-component';
 import viewModel from 'can-view-model';
 import domDispatch from 'can-util/dom/dispatch/dispatch';
 
-import hyperscript from '../../lib/stencil';
+import hyperscript from '../lib/can-hyperscript';
 import hyperComponents, { render } from '../../lib/component';
 
 const h = hyperComponents(hyperscript);
 
-QUnit.module('stencil - can-component');
+QUnit.module('can-hyperscript - can-component');
 
 QUnit.test('render', () => {
   const ViewModel = DefineMap.extend({
