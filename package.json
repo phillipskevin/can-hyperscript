@@ -25,10 +25,9 @@
     "build": "node build.js",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-hyperscript",
+  "main": "dist/cjs/lib/can-hyperscript",
   "keywords": [],
   "steal": {
-    "main": "can-hyperscript",
     "npmIgnore": [
       "testee",
       "steal-tools"
