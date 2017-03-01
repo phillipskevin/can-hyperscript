@@ -6,6 +6,20 @@ import compute from 'can-compute';
 
 import h from '../lib/can-hyperscript';
 
+QUnit.module('can-hyperscript');
+
+QUnit.test('should match hyperscript API', () => {
+  QUnit.equal(h('h1', 'a').outerHTML, '<h1>a</h1>');
+  QUnit.equal(h('h1', 'a', 'b').outerHTML, '<h1>ab</h1>');
+  QUnit.equal(h('h1', 'a', 'b', [ 'c', 'd' ]).outerHTML, '<h1>abcd</h1>');
+  QUnit.equal(h('h1.a.b#c', 'd').outerHTML, '<h1 class="a b" id="c">d</h1>');
+  QUnit.equal(h('.a.b#c', 'd').outerHTML, '<div class="a b" id="c">d</div>');
+  QUnit.equal(h('h1', { 'data-id': 'a' }, 'b').outerHTML, '<h1 data-id="a">b</h1>');
+  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c').outerHTML, '<h1 data-id="b">ac</h1>');
+  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c', [ 'd', 'e' ]).outerHTML, '<h1 data-id="b">acde</h1>');
+  QUnit.equal(h('div', h('h1', 'a')).outerHTML, '<div><h1>a</h1></div>');
+});
+
 QUnit.module('can-hyperscript - live binding - computes');
 
 QUnit.test('text node', () => {
