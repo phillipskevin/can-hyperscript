@@ -185,7 +185,7 @@ QUnit.test('can call function from data object', () => {
     return h('div', {}, [
       h('p', {}, [ () => `Count: ${data.count}` ]),
       h('input', { type: 'submit', onclick: data.plus }, [ 'Click Me!' ])
-    ])
+    ]);
   };
 
   const frag = view(data);
@@ -201,7 +201,7 @@ QUnit.test('can update data from event handler', () => {
     count: {
       set(val) {
         QUnit.equal(val, 5, 'count set to 5');
-        return val
+        return val;
       }
     }
   });
@@ -212,7 +212,7 @@ QUnit.test('can update data from event handler', () => {
       h('input', { type: 'submit', onclick: () => {
         data.count = 5;
       } }, [ 'Click Me!' ])
-    ])
+    ]);
   };
 
   const frag = view(new Data());
