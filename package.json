@@ -1,6 +1,6 @@
 {
   "name": "can-hyperscript",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Create HyperText with JavaScript and CanJS live binding.",
   "homepage": "",
   "repository": {
