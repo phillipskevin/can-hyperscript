@@ -22,11 +22,11 @@ QUnit.test('render', () => {
     class: { value: 'big-h1' }
   });
 
-  const view = scope => {
+  const view = data => {
     return h('h1', {
-      class: () => scope.class
+      class: () => data.class
     }, [
-      () => `Hello, ${scope.message}`
+      () => `Hello, ${data.message}`
     ]);
   };
 
@@ -60,11 +60,11 @@ QUnit.test('can bind viewModel to parent scope', () => {
     class: { value: 'big-h1' }
   });
 
-  const view = scope => {
+  const view = data => {
     return h('h1', {
-      class: () => scope.class
+      class: () => data.class
     }, [
-      () => `Hello, ${scope.message}`
+      () => `Hello, ${data.message}`
     ]);
   };
 
@@ -106,8 +106,8 @@ QUnit.test('event handling - call viewModel function', () => {
     }
   });
 
-  const view = scope => {
-    return h('input', { type: 'submit', onclick: scope.plus, value: 'Plus 1' }, []);
+  const view = data => {
+    return h('input', { type: 'submit', onclick: data.plus, value: 'Plus 1' }, []);
   };
 
   Component.extend({
@@ -127,8 +127,8 @@ QUnit.test('event handling - set viewModel property from event handler', () => {
     count: { set(val) { QUnit.equal(val, 5, 'viewmodel property set'); } }
   });
 
-  const view = scope => {
-    return h('input', { type: 'submit', onclick: () => { scope.count = 5; }, value: 'Set to 5' }, []);
+  const view = data => {
+    return h('input', { type: 'submit', onclick: () => { data.count = 5; }, value: 'Set to 5' }, []);
   };
 
   Component.extend({

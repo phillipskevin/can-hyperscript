@@ -15,21 +15,21 @@ const AppViewModel = DefineMap.extend({
   count: { type: 'number', value: 0 }
 });
 
-const appView = (scope) => {
+const appView = data => {
   return h('div', {}, [
     h('div', {}, [
-      h('h1', {}, [ () => `Count: ${scope.count}` ]),
+      h('h1', {}, [ () => `Count: ${data.count}` ]),
       h('input', {
         type: 'text',
-        value: () => scope.count,
+        value: () => data.count,
         onchange: (ev) => {
-          scope.count = ev.target.value;
+          data.count = ev.target.value;
         }
       }, [])
     ]),
     h('div', {}, [
       h('h2', {}, [ 'Children' ]),
-      h('a-counter', scope)
+      h('a-counter', data)
     ])
   ]);
 };
@@ -47,11 +47,11 @@ const CounterViewModel = DefineMap.extend({
   minus() { this.count-- }
 });
 
-const counterView = (scope) => {
+const counterView = data => {
   return h('div', {}, [
-      h('p', {}, [ () => `Count: ${scope.count}` ]),
-      h('input', { type: 'submit', onclick: scope.plus, value: '+' }, []),
-      h('input', { type: 'submit', onclick: scope.minus, value: '-' }, [])
+      h('p', {}, [ () => `Count: ${data.count}` ]),
+      h('input', { type: 'submit', onclick: data.plus, value: '+' }, []),
+      h('input', { type: 'submit', onclick: data.minus, value: '-' }, [])
   ]);
 };
 
