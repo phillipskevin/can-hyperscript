@@ -28,7 +28,7 @@ can-hyperscript allows you to use HyperScript with live-binding to CanJS observa
 
 ### can-compute
 
-If a compute is passed as an attribute or child, [can-view-live](http://canjs.com/doc/can-view-live.html) will be used to update the HTML whenever the value of the compute changes.
+If a compute is passed as an attribute or child node, [can-view-live](http://canjs.com/doc/can-view-live.html) will be used to update the HTML when the value of the compute changes.
 
 ```js
 import h from 'can-hyperscript';
@@ -48,7 +48,7 @@ frag.outerHTML; // <h1 class="bigger-h1">Hello, Mars!</h1>
 
 ### Map / DefineMap
 
-To use with other CanJS observable types, pass functions for attributes or children (this example is using [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)):
+To use with other CanJS observable types, you can pass a function as an attribute or child node (this example is using [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)). These functions will be turned into computes:
 
 ```js
 import h from 'can-hyperscript';
@@ -74,7 +74,7 @@ can-hyperscript provides a few helpers to make working with can-components simpl
 
 ### render
 
-`can-hyperscript/lib/component` provides a `render` function for rendering a view for a component.
+`can-hyperscript/lib/component` provides a `render` function for rendering the view for a component. This render function will take the [Scope](http://canjs.com/doc/can-view-scope.html) of the component, turn it in to an object, and pass it to your view function. You can use properties from the object in your view function using normal bracket or dot-notation.
 
 ```js
 import h from 'can-hyperscript';
@@ -99,7 +99,7 @@ Component.extend({
 
 ### hyperComponents mixin
 
-There is also a mixin available to allow you to render `can-component`s:
+There is also a mixin available to allow you to render `can-component`s using hyperscript:
 
 ```js
 import baseH from 'can-hyperscript';
