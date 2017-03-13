@@ -9,214 +9,226 @@ import h from '../lib/can-hyperscript';
 QUnit.module('can-hyperscript');
 
 QUnit.test('should match hyperscript API', () => {
-  QUnit.equal(h('h1', 'a').outerHTML, '<h1>a</h1>');
-  QUnit.equal(h('h1', 'a', 'b').outerHTML, '<h1>ab</h1>');
-  QUnit.equal(h('h1', 'a', 'b', [ 'c', 'd' ]).outerHTML, '<h1>abcd</h1>');
-  QUnit.equal(h('h1.a.b#c', 'd').outerHTML, '<h1 class="a b" id="c">d</h1>');
-  QUnit.equal(h('.a.b#c', 'd').outerHTML, '<div class="a b" id="c">d</div>');
-  QUnit.equal(h('h1', { 'data-id': 'a' }, 'b').outerHTML, '<h1 data-id="a">b</h1>');
-  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c').outerHTML, '<h1 data-id="b">ac</h1>');
-  QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c', [ 'd', 'e' ]).outerHTML, '<h1 data-id="b">acde</h1>');
-  QUnit.equal(h('div', h('h1', 'a')).outerHTML, '<div><h1>a</h1></div>');
+	QUnit.equal(h('h1', 'a').outerHTML, '<h1>a</h1>');
+	QUnit.equal(h('h1', 'a', 'b').outerHTML, '<h1>ab</h1>');
+	QUnit.equal(h('h1', 'a', 'b', [ 'c', 'd' ]).outerHTML, '<h1>abcd</h1>');
+	QUnit.equal(h('h1.a.b#c', 'd').outerHTML, '<h1 class="a b" id="c">d</h1>');
+	QUnit.equal(h('.a.b#c', 'd').outerHTML, '<div class="a b" id="c">d</div>');
+	QUnit.equal(h('h1', { 'data-id': 'a' }, 'b').outerHTML, '<h1 data-id="a">b</h1>');
+	QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c').outerHTML, '<h1 data-id="b">ac</h1>');
+	QUnit.equal(h('h1', 'a', { 'data-id': 'b' }, 'c', [ 'd', 'e' ]).outerHTML, '<h1 data-id="b">acde</h1>');
+	QUnit.equal(h('div', h('h1', 'a')).outerHTML, '<div><h1>a</h1></div>');
 });
 
 QUnit.module('can-hyperscript - live binding - computes');
 
 QUnit.test('text node', () => {
-  const message = compute('Hello, World!');
+	const message = compute('Hello, World!');
 
-  const view = data => {
-    return h('h1.big-h1', {}, [ data.message ]);
-  };
+	const view = data => {
+		return h('h1.big-h1', {}, [ data.message ]);
+	};
 
-  const frag = view({ message });
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'big-h1');
+	const frag = view({ message });
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'big-h1');
 
-  message('Hello, Mars!');
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, Mars!');
-  QUnit.equal(frag.className, 'big-h1');
+	message('Hello, Mars!');
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, Mars!');
+	QUnit.equal(frag.className, 'big-h1');
 });
 
 QUnit.test('attributes', () => {
-  const headerClass = compute('big-h1');
+	const headerClass = compute('big-h1');
 
-  const view = data => {
-    return h('h1', { class: data.headerClass }, [ 'Hello, World!' ]);
-  };
+	const view = data => {
+		return h('h1', { class: data.headerClass }, [ 'Hello, World!' ]);
+	};
 
-  const frag = view({ headerClass });
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'big-h1');
+	const frag = view({ headerClass });
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'big-h1');
 
-  headerClass('small-h1');
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'small-h1');
+	headerClass('small-h1');
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'small-h1');
 });
 
 QUnit.test('children', () => {
-  const children = compute([ '<li>First</li>', '<li>Second</li>' ]);
+	const children = compute([ '<li>First</li>', '<li>Second</li>' ]);
 
-  const view = data => {
-    return h('ul', {}, data.children);
-  };
+	const view = data => {
+		return h('ul', {}, data.children);
+	};
 
-  const frag = view({ children });
+	const frag = view({ children });
 
-  QUnit.equal(frag.tagName, 'UL');
+	QUnit.equal(frag.tagName, 'UL');
 
-  QUnit.equal(frag.children[0].tagName, 'LI');
-  QUnit.equal(frag.children[0].innerHTML, 'First');
+	QUnit.equal(frag.children[0].tagName, 'LI');
+	QUnit.equal(frag.children[0].innerHTML, 'First');
 
-  QUnit.equal(frag.children[1].tagName, 'LI');
-  QUnit.equal(frag.children[1].innerHTML, 'Second');
+	QUnit.equal(frag.children[1].tagName, 'LI');
+	QUnit.equal(frag.children[1].innerHTML, 'Second');
 
-  children([ '<li>First</li>', '<li>Second</li>', '<li>Third</li>' ]);
-  QUnit.equal(frag.tagName, 'UL');
+	children([ '<li>First</li>', '<li>Second</li>', '<li>Third</li>' ]);
+	QUnit.equal(frag.tagName, 'UL');
 
-  QUnit.equal(frag.children[0].tagName, 'LI');
-  QUnit.equal(frag.children[0].innerHTML, 'First');
+	QUnit.equal(frag.children[0].tagName, 'LI');
+	QUnit.equal(frag.children[0].innerHTML, 'First');
 
-  QUnit.equal(frag.children[1].tagName, 'LI');
-  QUnit.equal(frag.children[1].innerHTML, 'Second');
+	QUnit.equal(frag.children[1].tagName, 'LI');
+	QUnit.equal(frag.children[1].innerHTML, 'Second');
 
-  QUnit.equal(frag.children[2].tagName, 'LI');
-  QUnit.equal(frag.children[2].innerHTML, 'Third');
+	QUnit.equal(frag.children[2].tagName, 'LI');
+	QUnit.equal(frag.children[2].innerHTML, 'Third');
 });
 
 QUnit.module('can-hyperscript - live binding - DefineMap');
 
 QUnit.test('text node', () => {
-  const data = new DefineMap({
-    message: 'World'
-  });
+	const data = new DefineMap({
+		message: 'World'
+	});
 
-  const view = data => {
-    return h('h1.big-h1', {}, [
-      () => `Hello, ${data.message}!`
-    ]);
-  };
+	const view = data => {
+		return h('h1.big-h1', {}, [
+			() => `Hello, ${data.message}!`
+		]);
+	};
 
-  const frag = view(data);
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'big-h1');
+	const frag = view(data);
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'big-h1');
 
-  data.message = 'Mars';
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, Mars!');
-  QUnit.equal(frag.className, 'big-h1');
+	data.message = 'Mars';
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, Mars!');
+	QUnit.equal(frag.className, 'big-h1');
 });
 
 QUnit.test('attribute', () => {
-  const data = new DefineMap({
-    class: 'big-h1'
-  });
+	const data = new DefineMap({
+		class: 'big-h1'
+	});
 
-  const view = data => {
-    return h('h1', { class: () => data.class }, [
-      'Hello, World!'
-    ]);
-  };
+	const view = data => {
+		return h('h1', { class: () => data.class }, [
+			'Hello, World!'
+		]);
+	};
 
-  const frag = view(data);
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'big-h1');
+	const frag = view(data);
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'big-h1');
 
-  data.class = 'small-h1';
-  QUnit.equal(frag.tagName, 'H1');
-  QUnit.equal(frag.innerHTML, 'Hello, World!');
-  QUnit.equal(frag.className, 'small-h1');
+	data.class = 'small-h1';
+	QUnit.equal(frag.tagName, 'H1');
+	QUnit.equal(frag.innerHTML, 'Hello, World!');
+	QUnit.equal(frag.className, 'small-h1');
 });
 
 QUnit.test('children', () => {
-  const Scope = DefineMap.extend({
-    children: DefineList
-  });
-  const data = new Scope({
-    children: [ 'First', 'Second' ]
-  });
+	const Scope = DefineMap.extend({
+		children: DefineList
+	});
+	const data = new Scope({
+		children: [ 'First', 'Second' ]
+	});
 
-  const view = data => {
-    return h('ul', {}, () => data.children.map(child =>
-        h('li', {}, [ `${child} List Item` ])));
-  };
+	const view = data => {
+		return h('ul', {}, () => data.children.map(child =>
+			h('li', {}, [ `${child} List Item` ])));
+	};
 
-  const frag = view(data);
+	const frag = view(data);
 
-  QUnit.equal(frag.tagName, 'UL');
+	QUnit.equal(frag.tagName, 'UL');
 
-  QUnit.equal(frag.children[0].tagName, 'LI');
-  QUnit.equal(frag.children[0].innerHTML, 'First List Item');
+	QUnit.equal(frag.children[0].tagName, 'LI');
+	QUnit.equal(frag.children[0].innerHTML, 'First List Item');
 
-  QUnit.equal(frag.children[1].tagName, 'LI');
-  QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
+	QUnit.equal(frag.children[1].tagName, 'LI');
+	QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
 
-  data.children.push('Third');
-  QUnit.equal(frag.tagName, 'UL');
+	data.children.push('Third');
+	QUnit.equal(frag.tagName, 'UL');
 
-  QUnit.equal(frag.children[0].tagName, 'LI');
-  QUnit.equal(frag.children[0].innerHTML, 'First List Item');
+	QUnit.equal(frag.children[0].tagName, 'LI');
+	QUnit.equal(frag.children[0].innerHTML, 'First List Item');
 
-  QUnit.equal(frag.children[1].tagName, 'LI');
-  QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
+	QUnit.equal(frag.children[1].tagName, 'LI');
+	QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
 
-  QUnit.equal(frag.children[2].tagName, 'LI');
-  QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
+	QUnit.equal(frag.children[2].tagName, 'LI');
+	QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
+
+	data.children.splice(0, 1, 'Uno');
+	QUnit.equal(frag.tagName, 'UL');
+
+	QUnit.equal(frag.children[0].tagName, 'LI');
+	QUnit.equal(frag.children[0].innerHTML, 'Uno List Item');
+
+	QUnit.equal(frag.children[1].tagName, 'LI');
+	QUnit.equal(frag.children[1].innerHTML, 'Second List Item');
+
+	QUnit.equal(frag.children[2].tagName, 'LI');
+	QUnit.equal(frag.children[2].innerHTML, 'Third List Item');
 });
 
 QUnit.module('can-hyperscript - event handling');
 
 QUnit.test('can call function from data object', () => {
-  const data = new DefineMap({
-    count: 0,
-    plus() {
-      QUnit.ok(true, 'plus called');
-      this.count++;
-    }
-  });
+	const data = new DefineMap({
+		count: 0,
+		plus() {
+			QUnit.ok(true, 'plus called');
+			this.count++;
+		}
+	});
 
-  const view = data => {
-    return h('div', {}, [
-      h('p', {}, [ () => `Count: ${data.count}` ]),
-      h('input', { type: 'submit', onclick: data.plus }, [ 'Click Me!' ])
-    ]);
-  };
+	const view = data => {
+		return h('div', {}, [
+			h('p', {}, [ () => `Count: ${data.count}` ]),
+			h('input', { type: 'submit', onclick: data.plus }, [ 'Click Me!' ])
+		]);
+	};
 
-  const frag = view(data);
+	const frag = view(data);
 
-  QUnit.equal(frag.children[0].innerHTML, 'Count: 0');
+	QUnit.equal(frag.children[0].innerHTML, 'Count: 0');
 
-  const button = frag.children[1];
-  domDispatch.call(button, 'click');
+	const button = frag.children[1];
+	domDispatch.call(button, 'click');
 });
 
 QUnit.test('can update data from event handler', () => {
-  const Data = DefineMap.extend({
-    count: {
-      set(val) {
-        QUnit.equal(val, 5, 'count set to 5');
-        return val;
-      }
-    }
-  });
+	const Data = DefineMap.extend({
+		count: {
+			set(val) {
+				QUnit.equal(val, 5, 'count set to 5');
+				return val;
+			}
+		}
+	});
 
-  const view = data => {
-    return h('div', {}, [
-      h('p', {}, [ () => `Count: ${data.count}` ]),
-      h('input', { type: 'submit', onclick: () => {
-        data.count = 5;
-      } }, [ 'Click Me!' ])
-    ]);
-  };
+	const view = data => {
+		return h('div', {}, [
+			h('p', {}, [ () => `Count: ${data.count}` ]),
+			h('input', { type: 'submit', onclick: () => {
+				data.count = 5;
+			} }, [ 'Click Me!' ])
+		]);
+	};
 
-  const frag = view(new Data());
+	const frag = view(new Data());
 
-  const button = frag.children[1];
-  domDispatch.call(button, 'click');
+	const button = frag.children[1];
+	domDispatch.call(button, 'click');
 });
