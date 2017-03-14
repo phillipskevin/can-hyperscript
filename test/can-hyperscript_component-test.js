@@ -49,7 +49,7 @@ QUnit.test('render', () => {
   QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
 });
 
-QUnit.test('can bind viewModel to parent scope', () => {
+QUnit.test('bindings - can bind viewModel to parent scope', () => {
   const ViewModel = DefineMap.extend({
     message: {
       value: 'World',
@@ -79,22 +79,22 @@ QUnit.test('can bind viewModel to parent scope', () => {
     class: 'parent-h1'
   });
   const frag = h('hello-world', parentScope);
-  QUnit.equal(frag.firstChild.className, 'parent-h1');
-  QUnit.equal(frag.firstChild.tagName, 'H1');
-  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Parent!');
+  QUnit.equal(frag.firstChild.tagName, 'H1', 'correct tag');
+  QUnit.equal(frag.firstChild.className, 'parent-h1', 'parent sets default attribute');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Parent!', 'parent sets default child');
 
   // to-child binding
   parentScope.class = 'small-h1';
   parentScope.message = 'Kevin';
-  QUnit.equal(frag.firstChild.className, 'small-h1');
-  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!');
+  QUnit.equal(frag.firstChild.className, 'small-h1', 'parent can change vm through attribute');
+  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Kevin!', 'parent can change vm through child');
 
   // to-parent binding
   const vm = viewModel(frag);
   vm.class = 'big-h1';
   vm.message = 'Connor';
-  QUnit.equal(frag.firstChild.className, 'big-h1');
-  QUnit.equal(frag.firstChild.innerHTML, 'Hello, Connor!');
+  QUnit.equal(parentScope.class, 'big-h1', 'vm can change parent through attribute');
+  QUnit.equal(parentScope.message, 'Connor!', 'vm can change parent through child');
 });
 
 QUnit.test('event handling - call viewModel function', () => {
