@@ -142,3 +142,33 @@ QUnit.test('event handling - set viewModel property from event handler', () => {
   const button = frag.children[0];
   domDispatch.call(button, 'click');
 });
+
+QUnit.test('lists - work', () => {
+  const ViewModel = DefineMap.extend({
+    planets: {
+      value: [ 'Earth', 'Mars' ]
+    }
+  });
+
+  const view = data => {
+		return h('h1', { },
+			data.planets.map(planet =>
+				h('p', {}, [ () => `Hello, ${planet}!` ])
+			)
+		);
+  };
+
+  Component.extend({
+    tag: 'hello-world',
+    ViewModel,
+    view: render(view)
+  });
+
+  const frag = h('hello-world', {});
+  QUnit.equal(frag.firstChild.tagName, 'H1');
+	const paragraphs = frag.firstChild.children;
+  QUnit.equal(paragraphs.length, 2);
+
+  QUnit.equal(paragraphs[0].innerHTML, 'Hello, Earth!');
+  QUnit.equal(paragraphs[1].innerHTML, 'Hello, Mars!');
+});
